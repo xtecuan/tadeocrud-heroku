@@ -90,4 +90,13 @@ public class UsersFacade extends AbstractFacade<Users> {
         return user;
     }
 
+    public String getCompleteName(Users user) {
+        return user.getFirstname()
+                + " "
+                + (user.getMiddlename() != null && user.getMiddlename().length() > 0 ? user.getMiddlename() : "")
+                + " "
+                + user.getLastname();
+
+    }
+
 }

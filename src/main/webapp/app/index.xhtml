@@ -3,16 +3,58 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-<f:view>
-    <h:head></h:head>
-    <h:body>
-        <p:outputLabel>Welcome to the application!</p:outputLabel>
+    <f:view>
+        <h:head>
+            <title>#{bundle.app_index_title}</title>
+        </h:head>
+        <h:body>
+            <p:outputLabel>#{bundle.app_index_header}</p:outputLabel>
 
-        <p>Logged-in as #{request.userPrincipal.name}</p>
 
-        <h:form>
-            <p:commandButton value="Logout" action="#{logoutBacking.submit}"/>
-        </h:form>
-    </h:body>
-</f:view>
+            <p:outputPanel>
+                <div class="ui-g">
+                    <div class="ui-g-4"/>
+                    <div class="ui-g-4">
+
+                        <p:panelGrid columns="4">
+                            <p:column>
+                                <p:outputLabel>#{bundle.app_index_logged_in}</p:outputLabel>
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel>#{loginBacking.currentUser.user.firstname} #{loginBacking.currentUser.user.lastname}</p:outputLabel>
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel>(#{loginBacking.currentUser.user.email})</p:outputLabel>
+                            </p:column>
+                            <p:column>
+                                <h:form>
+                                    <p:commandButton value="#{bundle.app_index_logout}" action="#{logoutBacking.submit}"/>  
+                                </h:form>
+                            </p:column>
+
+                        </p:panelGrid>
+
+
+                    </div>
+                </div>
+            </p:outputPanel>
+
+            <p:spacer height="200"/>
+
+            <p:outputPanel>
+                <div class="ui-g">
+                    <div class="ui-g-4"/>
+                    <div class="ui-g-4">
+                        <p>
+                            <h:form>
+                                <p:commandButton rendered="#{request.isUserInRole('ADMIN')}" value="#{bundle.app_index_dbconsole}" action="#{loginBacking.dbconsole}"/>
+                            </h:form>
+                        </p>
+                    </div>
+                </div>
+            </p:outputPanel>
+
+
+        </h:body>
+    </f:view>
 </html>

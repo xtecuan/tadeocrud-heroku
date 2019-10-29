@@ -182,7 +182,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "com.livejournal.xtecuan.microprofile.entities.Users[ userid=" + userid + " ]";
+        return "Users[email=" + email + "]";
     }
 
 }

@@ -1,7 +1,8 @@
 package de.rieckpil.blog;
 
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
+import com.livejournal.xtecuan.microprofile.facade.UsersFacade;
+import com.livejournal.xtecuan.microprofile.web.beans.utils.UserSessionBean;
+import com.livejournal.xtecuan.microprofile.web.beans.utils.XBaseBean;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -16,10 +17,13 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.IOException;
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.view.ViewScoped;
 
 @Named
-@RequestScoped
-public class LoginBacking {
+@ViewScoped
+public class LoginBacking extends XBaseBean {
 
     @NotEmpty
     @Size(min = 8, message = "Password must have at least 8 characters")
@@ -38,10 +42,17 @@ public class LoginBacking {
     @Inject
     private FacesContext facesContext;
 
+    @Inject
+    private UsersFacade usersFacade;
+
+    @Inject
+    private UserSessionBean currentUser;
+
     public void submit() throws IOException {
 
         switch (continueAuthentication()) {
             case SEND_CONTINUE:
+                currentUser.setUser(usersFacade.findByEmailAndPass(email, password));
                 facesContext.responseComplete();
                 break;
             case SEND_FAILURE:
@@ -49,6 +60,7 @@ public class LoginBacking {
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login failed", null));
                 break;
             case SUCCESS:
+                currentUser.setUser(usersFacade.findByEmailAndPass(email, password));
                 facesContext.addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Login succeed", null));
                 externalContext.redirect(externalContext.getRequestContextPath() + "/app/index.jsf");
@@ -80,4 +92,25 @@ public class LoginBacking {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String dbconsole() {
+        return "/app/admin/index.jsf?faces-redirect=true";
+    }
+
+    @PostConstruct
+    @Override
+    public void init() {
+
+    }
+
+    public UserSessionBean getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(UserSessionBean currentUser) {
+        this.currentUser = currentUser;
+    }
+    
+    
+
 }

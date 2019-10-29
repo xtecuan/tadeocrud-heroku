@@ -148,10 +148,7 @@
                             <key>--deploy</key>
                             <value>${project.build.directory}/${project.build.finalName}</value>
                         </option>
-                        <option>
-                            <key>--systemproperties</key>
-                            <value>${project.build.directory}/${project.build.finalName}/WEB-INF/classes/${payaramicro.propsfile}</value>
-                        </option>
+                        
                        
                     </commandLineOptions>
                 </configuration>
