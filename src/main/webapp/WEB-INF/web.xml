@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="4.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+    <description>H2 Database Service Listener</description>
+    <display-name>h2-database-service</display-name>
+    <context-param>
+        <description>URL For Sample Database</description>
+        <param-name>db.url</param-name>
+        <param-value>jdbc:h2:tcp://localhost:50008/~/H2SampleDB;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE;DATABASE_TO_UPPER=true;IGNORECASE=TRUE;MVCC=TRUE;LOCK_TIMEOUT=600000</param-value>
+    </context-param>
+    <context-param>
+        <description>System Administrator for H2 Database</description>
+        <param-name>db.user</param-name>
+        <param-value>sa</param-value>
+    </context-param>
+    <context-param>
+        <description>Password for sa User</description>
+        <param-name>db.password</param-name>
+        <param-value>Welcome123$$1</param-value>
+    </context-param>
+    <context-param>
+        <description>Database Listener TCP Port allowing network connections</description>
+        <param-name>db.tcpServer</param-name>
+        <param-value>-tcpAllowOthers -tcpPort 50008</param-value>
+    </context-param>
+    <context-param>
+        <description>File Encoding for the Database</description>
+        <param-name>file.encoding</param-name>
+        <param-value>UTF-8</param-value>
+    </context-param>
+    <context-param>
+        <description>Allow web console for others</description>
+        <param-name>webAllowOthers</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <listener>
+        <description>Database Listener</description>
+        <listener-class>org.h2.server.web.DbStarter</listener-class>
+    </listener>
+    <servlet>
+        <description>Web Console Servlet</description>
+        <servlet-name>H2Console</servlet-name>
+        <servlet-class>org.h2.server.web.WebServlet</servlet-class>
+        <init-param>
+            <description>webAllowOthers value</description>
+            <param-name>webAllowOthers</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>H2Console</servlet-name>
+        <url-pattern>/console/*</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>/index.jsf</welcome-file>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+    <data-source>
+        <name>java:app/jdbc/H2SampleDB</name>
+        <class-name>org.h2.jdbcx.JdbcDataSource</class-name>
+        <url>jdbc:h2:~/H2SampleDB</url>      
+        <user>sa</user>
+        <password>Welcome123$$1</password>
+    </data-source>
+    <!--Primefaces Config-->
+    <context-param>
+        <description>Theme selected</description>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>omega</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Production</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.FONT_AWESOME</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.jsf</url-pattern>
+    </servlet-mapping>
+    <!--Charset encoding UTF-8-->
+    <filter>
+        <description>com.livejournal.xtecuan.microprofile.web.filters.CharacterEncodingFilter</description>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>com.livejournal.xtecuan.microprofile.web.filters.CharacterEncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <!--Security-->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Application pages</web-resource-name>
+            <url-pattern>/app/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ADMIN</role-name>
+            <role-name>USER</role-name>
+        </auth-constraint>
+    </security-constraint>
+    
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Application pages</web-resource-name>
+            <url-pattern>/app/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ADMIN</role-name>
+        </auth-constraint>
+    </security-constraint>
+ 
+    <security-role>
+        <role-name>USER</role-name>
+    </security-role>
+    <security-role>
+        <role-name>ADMIN</role-name>
+    </security-role>
+</web-app>
