@@ -29,10 +29,15 @@ Password: HolaHola$$$123
 DB CONSOLE
 
 Saved Settings: Generic H2 (Server)
+
 Driver Class: org.h2.Driver
+
 JDBC URL: jdbc:h2:tcp://localhost:50008/~/H2SampleDB
+
 User Name: sa
+
 Password: Welcome123$$1
+
 
 
 
