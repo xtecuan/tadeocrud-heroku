@@ -4,6 +4,7 @@
 For Running the Appliance:
 
 mvn clean install
+
 mvn payara-micro:start
 
 
