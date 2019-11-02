@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view>
+        <h:head>
+            <title>#{bundle.app_main_title}</title>
+            <style type="text/css">
+                .ui-row-editor .ui-row-editor-pencil {
+                    margin-left:8px;
+                }
+            </style>
+        </h:head>
+        <h:body>
+            <p:outputPanel>
+                <div class="ui-g">
+                    <div class="ui-g-3">      
+                        <p:outputLabel style="align-content: center">#{bundle.app_main_header}</p:outputLabel>
+                    </div>
+
+
+                    <div class="ui-g-3">  
+                        <h:form>
+                            <p:commandButton rendered="#{request.isUserInRole('ADMIN')}" value="#{bundle.app_main_dbconsole}" action="#{mainBean.dbconsole}"/>
+                        </h:form>
+                    </div>
+                    <div class="ui-g-3"> 
+                        <p:panelGrid  columns="3">
+                            <p:outputLabel>#{bundle.app_main_logged_in}</p:outputLabel>
+                            <p:outputLabel>#{loginBacking.currentUser.user.firstname} #{loginBacking.currentUser.user.lastname}</p:outputLabel>
+                            <p:outputLabel>(#{loginBacking.currentUser.user.email})</p:outputLabel>
+                        </p:panelGrid>
+                    </div>
+                    <div class="ui-g-3">  
+                        <h:form>
+                            <p:commandButton value="#{bundle.app_main_logout}" action="#{logoutBacking.submit}"/>  
+                        </h:form>
+                    </div>
+
+                </div>
+            </p:outputPanel>
+            <p:spacer height="100"/>
+            <p:outputPanel>
+                <div class="ui-g">
+                    <div class="ui-g-4">                        
+                    </div>
+                    <div class="ui-g-4">   
+                        <h:form id="myForm">
+                            <p:growl id="msgs0" showDetail="true"/>
+                            <p:panelGrid columns="2" columnClasses="label, value">
+                                <h:outputText value="#{bundle.app_main_fn}" />
+                                <p:inputText id="fn" value="#{mainBean.formUser.firstname}" required="true" requiredMessage="#{bundle.app_main_fnreq}"/>
+                                
+                                <h:outputText value="#{bundle.app_main_mn}" />
+                                <p:inputText id="mn" value="#{mainBean.formUser.middlename}"/>
+
+                                <h:outputText value="#{bundle.app_main_ln}" />
+                                <p:inputText id="ln" value="#{mainBean.formUser.lastname}" required="true" requiredMessage="#{bundle.app_main_lnreq}"/>
+
+                                <h:outputText  value="#{bundle.app_main_pass}" />
+                                <p:password id="pass" rendered="#{empty mainBean.formUser.password}" value="#{mainBean.formUser.password}" required="true" requiredMessage="#{bundle.app_main_passreq}"/>
+                                <p:password id="pass1" rendered="#{not empty mainBean.formUser.password}" value="#{mainBean.formUser.password}"/>
+
+                                <h:outputText value="#{bundle.app_main_email}" />
+                                <p:inputText id="email" value="#{mainBean.formUser.email}" required="true" requiredMessage="#{bundle.app_main_ereq}"/>
+
+                                <h:outputText value="#{bundle.app_main_rol}" />
+                                <p:selectOneMenu id="rol" value="#{mainBean.formUser.wrole}" dynamic="true" style="width:125px" required="true" requiredMessage="#{bundle.app_main_rolreq}">
+                                    <f:selectItem itemLabel="#{bundle.app_main_selone}" itemValue="" />
+                                    <f:selectItems value="#{mainBean.roles}" />
+                                </p:selectOneMenu>
+                                <f:facet name="footer">
+                                    <p:commandButton id="bsave" rendered="#{empty mainBean.formUser.userid}" 
+                                                     action="#{mainBean.save}" update="msgs0,form:users,myForm" value="#{bundle.app_main_bsave}"/>
+                                    <p:commandButton id="bupdate" rendered="#{not empty mainBean.formUser.userid}" 
+                                                     action="#{mainBean.update}" update="msgs0,form:users,myForm" value="#{bundle.app_main_bupd}"/>
+                                </f:facet>
+                            </p:panelGrid>
+                        </h:form>
+                    </div>
+                    <div class="ui-g-4">                        
+                    </div>
+                </div>
+            </p:outputPanel>
+            <p:spacer height="100"/>
+            <p:outputPanel>
+                <div class="ui-g">
+                    <div class="ui-g-2">                        
+                    </div>
+                    <div class="ui-g-8">
+                        <h:form id="form">
+                            <p:growl id="msgs" showDetail="true"/>
+
+                            <p:dataTable id="users" var="user" value="#{mainBean.users}" selectionMode="single" selection="#{mainBean.selectedUser}" rowKey="#{user.userid}" style="margin-bottom:20px">
+                                <f:facet name="header">
+                                    <p:outputLabel>#{bundle.app_main_theader}</p:outputLabel>
+                                </f:facet>
+                                <p:ajax event="rowSelect" listener="#{mainBean.onRowSelect}" update=":form:msgs,myForm" />
+                                <p:ajax event="rowUnselect" listener="#{mainBean.onRowUnselect}" update=":form:msgs,myForm" />
+
+                                <p:column headerText="#{bundle.app_main_id}" width="25">
+                                    <h:outputText value="#{user.userid}" />
+                                </p:column>
+                                <p:column headerText="#{bundle.app_main_email}" width="100" style="align-content: center ">
+                                    <h:outputText value="#{user.email}" />                                    
+                                </p:column>
+                                <p:column headerText="#{bundle.app_main_fn}" width="75">
+                                    <h:outputText value="#{user.firstname}" />
+                                </p:column>
+                                <p:column headerText="#{bundle.app_main_mn}" width="75">
+                                    <h:outputText value="#{user.middlename}" />
+                                </p:column>
+                                <p:column headerText="#{bundle.app_main_ln}" width="100">
+                                    <h:outputText value="#{user.lastname}" />
+                                </p:column>
+                                <p:column headerText="#{bundle.app_main_rol}" width="50">
+                                    <h:outputText value="#{user.wrole}" />
+                                </p:column>
+                                <f:facet name="footer">
+                                    <p:commandButton id="delete" action="#{mainBean.delete}" value="#{bundle.app_main_bdel}" update="form:msgs,form:users,myForm"/>
+                                </f:facet>
+                            </p:dataTable>
+                        </h:form>
+                    </div>
+                    <div class="ui-g-2">                        
+                    </div>
+                </div>
+            </p:outputPanel> 
+
+
+        </h:body>
+    </f:view>
+</html>
