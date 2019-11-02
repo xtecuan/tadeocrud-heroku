@@ -25,12 +25,22 @@ public class UserSessionBean implements Serializable {
 
     private Users user;
 
+    private String passwordChange;
+
     public Users getUser() {
         return user;
     }
 
     public void setUser(Users user) {
         this.user = user;
+    }
+
+    public String getPasswordChange() {
+        return passwordChange;
+    }
+
+    public void setPasswordChange(String passwordChange) {
+        this.passwordChange = passwordChange;
     }
 
 }

@@ -63,7 +63,7 @@ public class LoginBacking extends XBaseBean {
                 currentUser.setUser(usersFacade.findByEmailAndPass(email, password));
                 facesContext.addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Login succeed", null));
-                externalContext.redirect(externalContext.getRequestContextPath() + "/app/index.jsf");
+                externalContext.redirect(externalContext.getRequestContextPath() + "/app/main.jsf");
                 break;
             case NOT_DONE:
         }
@@ -92,16 +92,13 @@ public class LoginBacking extends XBaseBean {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String dbconsole() {
-        return "/app/admin/index.jsf?faces-redirect=true";
-    }
+   
 
     @PostConstruct
     @Override
     public void init() {
-
-    }
+       
+    }   
 
     public UserSessionBean getCurrentUser() {
         return currentUser;
@@ -109,8 +106,6 @@ public class LoginBacking extends XBaseBean {
 
     public void setCurrentUser(UserSessionBean currentUser) {
         this.currentUser = currentUser;
-    }
-    
-    
+    }   
 
 }

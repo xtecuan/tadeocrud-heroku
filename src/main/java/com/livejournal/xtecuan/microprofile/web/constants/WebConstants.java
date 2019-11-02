@@ -17,4 +17,6 @@ package com.livejournal.xtecuan.microprofile.web.constants;
 public class WebConstants {
 
     public static final String USER_IN_SESSION = "USER_IN";
+    public static final String USER_PASS_PLAIN_MARK = "##";
+    public static final String[] ROLES = new String[]{"ADMIN", "USER"};
 }
