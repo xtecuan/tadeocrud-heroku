@@ -1,0 +1,8 @@
+until $(curl -o /dev/null -s -I -f http://localhost:$PORT); do
+  sleep 5
+done
+
+for ROUTE in $WARMUP_ROUTES; do
+  echo "[warmup] calling $ROUTE"
+  curl -L "http://localhost:$PORT$ROUTE" >/dev/null 2>&1
+done

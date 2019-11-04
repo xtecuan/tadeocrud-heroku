@@ -51,7 +51,7 @@
                             <p:panelGrid columns="2" columnClasses="label, value">
                                 <h:outputText value="#{bundle.app_main_fn}" />
                                 <p:inputText id="fn" value="#{mainBean.formUser.firstname}" required="true" requiredMessage="#{bundle.app_main_fnreq}"/>
-                                
+
                                 <h:outputText value="#{bundle.app_main_mn}" />
                                 <p:inputText id="mn" value="#{mainBean.formUser.middlename}"/>
 
@@ -92,33 +92,82 @@
                         <h:form id="form">
                             <p:growl id="msgs" showDetail="true"/>
 
-                            <p:dataTable id="users" var="user" value="#{mainBean.users}" selectionMode="single" selection="#{mainBean.selectedUser}" rowKey="#{user.userid}" style="margin-bottom:20px">
+                            <p:dataTable id="users" var="user" value="#{mainBean.users}" 
+                                         selectionMode="single" selection="#{mainBean.selectedUser}" 
+                                         rowKey="#{user.userid}" style="margin-bottom:20px"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                         paginator="true" rows="10">
                                 <f:facet name="header">
                                     <p:outputLabel>#{bundle.app_main_theader}</p:outputLabel>
                                 </f:facet>
+
                                 <p:ajax event="rowSelect" listener="#{mainBean.onRowSelect}" update=":form:msgs,myForm" />
                                 <p:ajax event="rowUnselect" listener="#{mainBean.onRowUnselect}" update=":form:msgs,myForm" />
 
-                                <p:column headerText="#{bundle.app_main_id}" width="25">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.app_main_id}" />
+                                    </f:facet>
                                     <h:outputText value="#{user.userid}" />
                                 </p:column>
-                                <p:column headerText="#{bundle.app_main_email}" width="100" style="align-content: center ">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.app_main_email}"/>
+                                    </f:facet>
                                     <h:outputText value="#{user.email}" />                                    
                                 </p:column>
-                                <p:column headerText="#{bundle.app_main_fn}" width="75">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.app_main_fn}"/>
+                                    </f:facet>
                                     <h:outputText value="#{user.firstname}" />
                                 </p:column>
-                                <p:column headerText="#{bundle.app_main_mn}" width="75">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.app_main_mn}"/>
+                                    </f:facet>
                                     <h:outputText value="#{user.middlename}" />
                                 </p:column>
-                                <p:column headerText="#{bundle.app_main_ln}" width="100">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.app_main_ln}"/>
+                                    </f:facet>
                                     <h:outputText value="#{user.lastname}" />
                                 </p:column>
-                                <p:column headerText="#{bundle.app_main_rol}" width="50">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.app_main_rol}"/>
+                                    </f:facet>
                                     <h:outputText value="#{user.wrole}" />
                                 </p:column>
                                 <f:facet name="footer">
-                                    <p:commandButton id="delete" action="#{mainBean.delete}" value="#{bundle.app_main_bdel}" update="form:msgs,form:users,myForm"/>
+
+                                    <p:panelGrid columns="5">
+
+                                        <p:commandButton id="delete" action="#{mainBean.delete}" value="#{bundle.app_main_bdel}" update="form:msgs,form:users,myForm"/>
+
+                                        <h:commandLink>
+                                            <p:graphicImage name="/images/excel.png" width="24"/>
+                                            <p:dataExporter type="xls" target="users" fileName="users" />
+                                        </h:commandLink>
+
+                                        <h:commandLink>
+                                            <p:graphicImage name="/images/pdf.png" width="24"/>
+                                            <p:dataExporter type="pdf" target="users" fileName="users"/>
+                                        </h:commandLink>
+
+                                        <h:commandLink>
+                                            <p:graphicImage name="/images/csv.png" width="24"/>
+                                            <p:dataExporter type="csv" target="users" fileName="users" />
+                                        </h:commandLink>
+
+                                        <h:commandLink>
+                                            <p:graphicImage name="/images/xml.png" width="24"/>
+                                            <p:dataExporter type="xml" target="users" fileName="users" />
+                                        </h:commandLink>
+                                    </p:panelGrid>
+
+
                                 </f:facet>
                             </p:dataTable>
                         </h:form>
